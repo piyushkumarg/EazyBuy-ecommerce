@@ -1,5 +1,4 @@
-import React, { Children, Fragment } from "react";
-
+import React, { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -7,6 +6,8 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectItems } from "../cart/cartSlice";
 
 const user = {
   name: "Tom Cook",
@@ -21,9 +22,9 @@ const navigation = [
 ];
 
 const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Your Profile", link: "/" },
+  { name: "Settings", link: "/" },
+  { name: "Sign out", link: "/signin" },
 ];
 
 function classNames(...classes) {
@@ -31,6 +32,9 @@ function classNames(...classes) {
 }
 
 export default function Navbar({ children }) {
+
+  const items = useSelector(selectItems)
+  
   return (
     <>
       <div className="min-h-full ">
@@ -81,9 +85,9 @@ export default function Navbar({ children }) {
                             aria-hidden="true"
                           />
                         </button>
-                        <span className="  rounded-full mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                          3
-                        </span>
+                        {items.length >0 && (<span className="  rounded-full mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                          {items.length}
+                        </span>)}
                       </Link>
 
                       {/* Profile dropdown */}
@@ -111,15 +115,15 @@ export default function Navbar({ children }) {
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
-                                  <a
-                                    href={item.href}
+                                  <Link
+                                   to={item.link}
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
                                   >
                                     {item.name}
-                                  </a>
+                                  </Link>
                                 )}
                               </Menu.Item>
                             ))}
@@ -196,9 +200,9 @@ export default function Navbar({ children }) {
                           aria-hidden="true"
                         />
                       </button>
-                      <span className=" rounded-full mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                        3
-                      </span>
+                      {items.length >0 && <span className=" rounded-full mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                        {items.length}
+                      </span>}
                     </Link>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
