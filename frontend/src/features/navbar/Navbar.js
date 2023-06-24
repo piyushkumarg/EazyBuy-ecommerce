@@ -22,7 +22,8 @@ const navigation = [
 ];
 
 const userNavigation = [
-  { name: "Your Profile", link: "/" },
+  { name: "Your Profile", link: "/profile" },
+  { name: "My Orders", link: "/orders" },
   { name: "Settings", link: "/" },
   { name: "Sign out", link: "/signin" },
 ];

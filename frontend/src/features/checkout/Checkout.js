@@ -8,7 +8,7 @@ import {
 } from "../cart/cartSlice";
 import { useForm } from "react-hook-form";
 import { selectSignedInUser, updateUserAsync } from "../auth/authSlice";
-import { createOrderAsync } from "../order/orderSlice";
+import { createOrderAsync, selectCurrentOrder } from "../order/orderSlice";
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -20,6 +20,8 @@ export default function Checkout() {
   } = useForm();
   const user = useSelector(selectSignedInUser);
   const items = useSelector(selectItems);
+  const currentOrder = useSelector(selectCurrentOrder);
+
   const totalAmount = items.reduce(
     (amount, item) => item.price * item.quantity + amount,
     0
@@ -56,6 +58,7 @@ export default function Checkout() {
         user,
         paymentMethod,
         selectedAddress,
+        status: "pending", // other status can be delivered, received.
       };
       dispatch(createOrderAsync(order));
       // need to redirect from here to a new page of order success.
@@ -71,6 +74,7 @@ export default function Checkout() {
   return (
     <>
       {!items.length && <Navigate to="/" replace={true}></Navigate>}
+      {currentOrder && <Navigate to={`/order-success/${currentOrder.id}`} replace={true} ></Navigate>}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
