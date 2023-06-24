@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createUser, checkUser, updateUser } from "./authAPI";
+import { createUser, checkUser, signOut } from "./authAPI";
+import { updateUser } from "../user/userAPI";
 
 const initialState = {
   signedInUser: null,
@@ -34,13 +35,20 @@ export const checkUserAsync = createAsyncThunk(
   }
 );
 
+export const signOutAsync = createAsyncThunk(
+  "user/signOut",
+  async (signinInfo) => {
+    const response = await signOut(signinInfo);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+
 export const authSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
-    },
+   
   },
   extraReducers: (builder) => {
     builder
@@ -68,13 +76,18 @@ export const authSlice = createSlice({
       .addCase(updateUserAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.signedInUser = action.payload;
+      })
+      .addCase(signOutAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(signOutAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.signedInUser = null;
       });
   },
 });
 
 export const selectSignedInUser = (state) => state.auth.signedInUser;
 export const selectError = (state) => state.auth.error;
-
-export const { increment } = authSlice.actions;
 
 export default authSlice.reducer;

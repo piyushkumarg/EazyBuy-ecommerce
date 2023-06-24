@@ -22,10 +22,10 @@ const navigation = [
 ];
 
 const userNavigation = [
-  { name: "Your Profile", link: "/profile" },
+  { name: "My Profile", link: "/profile" },
   { name: "My Orders", link: "/orders" },
   { name: "Settings", link: "/" },
-  { name: "Sign out", link: "/signin" },
+  { name: "Sign out", link: "/signout" },
 ];
 
 function classNames(...classes) {
@@ -86,9 +86,11 @@ export default function Navbar({ children }) {
                             aria-hidden="true"
                           />
                         </button>
-                        {items.length >0 && (<span className="  rounded-full mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                          {items.length}
-                        </span>)}
+                        {items.length > 0 && (
+                          <span className="  rounded-full mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                            {items.length}
+                          </span>
+                        )}
                       </Link>
 
                       {/* Profile dropdown */}
@@ -117,7 +119,7 @@ export default function Navbar({ children }) {
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
                                   <Link
-                                   to={item.link}
+                                    to={item.link}
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700"
@@ -201,21 +203,23 @@ export default function Navbar({ children }) {
                           aria-hidden="true"
                         />
                       </button>
-                      {items.length >0 && <span className=" rounded-full mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                        {items.length}
-                      </span>}
+                      {items.length > 0 && (
+                        <span className=" rounded-full mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                          {items.length}
+                        </span>
+                      )}
                     </Link>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
                     {userNavigation.map((item) => (
-                      <Disclosure.Button
+                      <Link
                         key={item.name}
                         as="a"
-                        href={item.href}
+                        to={item.link}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
                         {item.name}
-                      </Disclosure.Button>
+                      </Link>
                     ))}
                   </div>
                 </div>
