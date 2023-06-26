@@ -18,6 +18,11 @@ import { fetchSignedInUserAsync } from "./features/user/userSlice";
 import Signout from "./features/auth/components/Signout";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
+import AdminProtected from "./features/auth/components/AdminProtected";
+import AdminHome from "./pages/AdminHome";
+import AdminProductDetailPage from "./pages/AdminProductDetailPage";
+import AdminProductFormPage from "./pages/AdminProductFormPage";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -92,6 +97,40 @@ const router = createBrowserRouter([
     path: "/forgot-password",
     element: <ForgotPasswordPage />,
   },
+  
+  {
+    path: "/admin",
+    element: (
+      <AdminProtected>
+        <AdminHome></AdminHome>
+      </AdminProtected>
+    ),
+  },
+  {
+    path: "/admin/product-detail/:id",
+    element: (
+      <AdminProtected>
+        <AdminProductDetailPage></AdminProductDetailPage>
+      </AdminProtected>
+    ),
+  },
+  {
+    path: "/admin/product-form",
+    element: (
+      <AdminProtected>
+        <AdminProductFormPage></AdminProductFormPage>
+      </AdminProtected>
+    ),
+  },
+  {
+    path: "/admin/product-form/edit/:id",
+    element: (
+      <AdminProtected>
+        <AdminProductFormPage></AdminProductFormPage>
+      </AdminProtected>
+    ),
+  },
+
   {
     path: "*",
     element: <PageNotFound />,
