@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchSignedInUserOrderAsync,
@@ -6,21 +6,21 @@ import {
   selectUserInfo,
 } from "../userSlice";
 
-
-
 export default function UserOrders() {
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
 
-  console.log(user)
-
   useEffect(() => {
     dispatch(fetchSignedInUserOrderAsync(user?.id));
   }, []);
 
+  if (!Array.isArray(orders)) {
+    return null; // Render nothing if orders is not an array
+  }
+
   return (
-    <div >
+    <div>
       <div className="border-b rounded-lg shadow-sm border-gray-300 pb-4 px-4  sm:px-6">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900">
           My Order

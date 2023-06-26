@@ -9,12 +9,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectItems } from "../cart/cartSlice";
 
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+import { selectSignedInUser } from "../auth/authSlice";
 
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
@@ -33,13 +28,16 @@ function classNames(...classes) {
 }
 
 export default function Navbar({ children }) {
+  const items = useSelector(selectItems);
+  const user = useSelector(selectSignedInUser);
 
-  const items = useSelector(selectItems)
-  
   return (
     <>
       <div className="min-h-full ">
-        <Disclosure as="nav" className="bg-gray-800  sticky top-0 z-50">
+        <Disclosure
+          as="nav"
+          className="bg-gray-800 min-h-fit sticky top-0 z-50"
+        >
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -49,7 +47,7 @@ export default function Navbar({ children }) {
                       <Link to="/">
                         <img
                           className="h-8 w-8"
-                          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                          src="/ecommerce.png"
                           alt="Your Company"
                         />
                       </Link>
@@ -100,7 +98,11 @@ export default function Navbar({ children }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
+                              src={
+                                user.profileImage
+                                  ? user.profileImage
+                                  : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                              }
                               alt=""
                             />
                           </Menu.Button>
@@ -180,13 +182,17 @@ export default function Navbar({ children }) {
                       <div className="flex-shrink-0">
                         <img
                           className="h-10 w-10 rounded-full"
-                          src={user.imageUrl}
+                          src={
+                            user.profileImage
+                              ? user.profileImage
+                              : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          }
                           alt=""
                         />
                       </div>
                       <div className="ml-3">
                         <div className="text-base font-medium leading-none text-white">
-                          {user.name}
+                          {user.name ? user.name : "New User"}
                         </div>
                         <div className="text-sm font-medium leading-none text-gray-400">
                           {user.email}

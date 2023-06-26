@@ -84,7 +84,6 @@ export default function UserProfile() {
             <form
               noValidate
               onSubmit={handleSubmit((data) => {
-                console.log(data);
                 handleAdd(data);
                 reset();
               })}
@@ -108,6 +107,10 @@ export default function UserProfile() {
                         type="text"
                         {...register("name", {
                           required: "name is required",
+                          pattern: {
+                            value: /^[A-Za-z\s]+$/i,
+                            message: "Please enter valid name",
+                          },
                         })}
                         id="name"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -130,6 +133,10 @@ export default function UserProfile() {
                         id="email"
                         {...register("email", {
                           required: "email is required",
+                          pattern: {
+                            value: /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
+                            message: "Please enter valid email",
+                          },
                         })}
                         type="email"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -152,6 +159,10 @@ export default function UserProfile() {
                         id="phone"
                         {...register("phone", {
                           required: "phone is required",
+                          pattern: {
+                            value: /^[0-9]+$/i,
+                            message: "Please enter valid Phone number",
+                          },
                         })}
                         type="tel"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -240,6 +251,10 @@ export default function UserProfile() {
                         type="text"
                         {...register("pinCode", {
                           required: "pinCode is required",
+                          pattern: {
+                            value: /^[0-9]+$/i,
+                            message: "Please enter valid PIN code",
+                          },
                         })}
                         id="pinCode"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -279,7 +294,7 @@ export default function UserProfile() {
             Your Address
           </h2>
           {user.addresses.map((address, index) => (
-            <div>
+            <div key={index}>
               {/* Display address */}
               <div className="flex rounded-md  justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200">
                 <div className="">
@@ -327,7 +342,6 @@ export default function UserProfile() {
                 <form
                   noValidate
                   onSubmit={handleSubmit((data) => {
-                    console.log(data);
                     handleEdit(data, index);
                     reset();
                   })}
@@ -350,6 +364,10 @@ export default function UserProfile() {
                             type="text"
                             {...register("name", {
                               required: "name is required",
+                              pattern: {
+                                value: /^[A-Za-z\s]+$/i,
+                                message: "Please enter valid name",
+                              },
                             })}
                             id="name"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -374,6 +392,10 @@ export default function UserProfile() {
                             id="email"
                             {...register("email", {
                               required: "email is required",
+                              pattern: {
+                                value: /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
+                                message: "Please enter valid email",
+                              },
                             })}
                             type="email"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -398,6 +420,10 @@ export default function UserProfile() {
                             id="phone"
                             {...register("phone", {
                               required: "phone is required",
+                              pattern: {
+                                value: /^[0-9]+$/i,
+                                message: "Please enter valid Phone number",
+                              },
                             })}
                             type="tel"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -494,6 +520,10 @@ export default function UserProfile() {
                             type="text"
                             {...register("pinCode", {
                               required: "pinCode is required",
+                              pattern: {
+                                value: /^[0-9]+$/i,
+                                message: "Please enter valid PIN Code",
+                              },
                             })}
                             id="pinCode"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

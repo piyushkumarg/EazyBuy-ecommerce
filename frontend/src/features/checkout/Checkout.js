@@ -40,12 +40,10 @@ export default function Checkout() {
   };
 
   const handleAddress = (e) => {
-    console.log(e.target.value);
     setSelectedAddress(user.addresses[e.target.value]);
   };
 
   const handlePayment = (e) => {
-    console.log(e.target.value);
     setPaymentMethod(e.target.value);
   };
 
@@ -88,7 +86,6 @@ export default function Checkout() {
               noValidate
               className="bg-white rounded-xl shadow-md px-5 py-5 mt-12 "
               onSubmit={handleSubmit((data) => {
-                console.log(data);
                 dispatch(
                   updateUserAsync({
                     ...user,
@@ -120,6 +117,10 @@ export default function Checkout() {
                           type="text"
                           {...register("name", {
                             required: "name is required",
+                            pattern: {
+                              value: /^[A-Za-z\s]+$/i,
+                              message: "Please enter valid name",
+                            },
                           })}
                           id="name"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -142,6 +143,10 @@ export default function Checkout() {
                           id="email"
                           {...register("email", {
                             required: "email is required",
+                            pattern: {
+                              value: /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
+                              message: "Please enter valid email",
+                            },
                           })}
                           type="email"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -164,6 +169,10 @@ export default function Checkout() {
                           id="phone"
                           {...register("phone", {
                             required: "phone is required",
+                            pattern: {
+                              value: /^[0-9]+$/i,
+                              message: "Please enter valid Phone number",
+                            },
                           })}
                           type="tel"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -254,6 +263,10 @@ export default function Checkout() {
                           type="text"
                           {...register("pinCode", {
                             required: "pinCode is required",
+                            pattern: {
+                              value: /^[0-9]+$/i,
+                              message: "Please enter valid PIN code",
+                            },
                           })}
                           id="pinCode"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
