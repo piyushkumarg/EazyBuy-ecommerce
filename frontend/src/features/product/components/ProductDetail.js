@@ -4,8 +4,9 @@ import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductByIdAsync, selectProductById } from "../productSlice";
 import { useParams } from "react-router-dom";
-import {addToCartAsync} from '../../cart/cartSlice'
-import {selectSignedInUser} from '../../auth/authSlice'
+import { addToCartAsync, selectItems } from "../../cart/cartSlice";
+import { selectSignedInUser } from "../../auth/authSlice";
+import { discountedPrice } from "../../../app/constants";
 
 //// TODO: In server data we will add colors, sizes , highlights. to each product
 const colors = [
@@ -36,35 +37,35 @@ function classNames(...classes) {
 
 //TODO: Loading UI
 export default function ProductDetail() {
+  const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const user = useSelector(selectSignedInUser);
   const product = useSelector(selectProductById);
-  const dispatch = useDispatch();
+  const items = useSelector(selectItems);
   const params = useParams();
 
   const handleCart = (e) => {
-    e.preventDefault()
-    const newItem = { ...product, quantity: 1, user: user.id };
-    delete newItem["id"];
-      dispatch(addToCartAsync(newItem)); 
-
+    e.preventDefault();
+    if (items.findIndex((item) => item.productId === product.id) < 0) {
+      const newItem = { ...product, productId:product.id, quantity: 1, user: user.id };
+      delete newItem["id"];
+      dispatch(addToCartAsync(newItem));
+    } else {
+      alert("Already added");
+    }
   };
 
   useEffect(() => {
     dispatch(fetchProductByIdAsync(params.id));
   }, [dispatch, params.id]);
 
-  
-
   return (
     <div className="bg-white">
       {product && (
         <div className="pt-6">
           <nav aria-label="Breadcrumb">
-            <ol
-              className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
-            >
+            <ol className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
               {product.breadcrumbs &&
                 product.breadcrumbs.map((breadcrumb) => (
                   <li key={breadcrumb.id}>
@@ -145,8 +146,11 @@ export default function ProductDetail() {
             {/* Options */}
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">
+              <p className="text-xl line-through tracking-tight text-gray-400">
                 ${product.price}
+              </p>
+              <p className="text-3xl tracking-tight text-gray-900">
+                ${discountedPrice(product)}
               </p>
 
               {/* Reviews */}
@@ -302,7 +306,7 @@ export default function ProductDetail() {
                 </div>
 
                 <button
-                onClick={handleCart}
+                  onClick={handleCart}
                   type="submit"
                   className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >

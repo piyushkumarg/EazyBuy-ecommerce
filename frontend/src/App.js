@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import {createBrowserRouter,RouterProvider} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import SigninPage from "./pages/SigninPage";
 import SignupPage from "./pages/SignupPage";
@@ -22,6 +22,7 @@ import AdminProtected from "./features/auth/components/AdminProtected";
 import AdminHome from "./pages/AdminHome";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductFormPage from "./pages/AdminProductFormPage";
+import AdminOrdersPage from "./pages/AdminOrdersPage";
 
 const router = createBrowserRouter([
   {
@@ -97,7 +98,7 @@ const router = createBrowserRouter([
     path: "/forgot-password",
     element: <ForgotPasswordPage />,
   },
-  
+
   {
     path: "/admin",
     element: (
@@ -130,7 +131,14 @@ const router = createBrowserRouter([
       </AdminProtected>
     ),
   },
-
+  {
+    path: "/admin/orders",
+    element: (
+      <AdminProtected>
+        <AdminOrdersPage></AdminOrdersPage>
+      </AdminProtected>
+    ),
+  },
   {
     path: "*",
     element: <PageNotFound />,
@@ -143,7 +151,7 @@ function App() {
   useEffect(() => {
     if (user) {
       dispatch(fetchItemsByUserIdAsync(user.id));
-       dispatch(fetchSignedInUserAsync(user.id));
+      dispatch(fetchSignedInUserAsync(user.id));
     }
   }, [dispatch, user]);
 
