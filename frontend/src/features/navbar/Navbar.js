@@ -1,15 +1,20 @@
-import React, { Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   ShoppingCartIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectItems } from "../cart/cartSlice";
-
 import { selectSignedInUser } from "../auth/authSlice";
+import { IoIosSearch } from "react-icons/io";
+import {
+  fetchProductsBySearchQueryAsync,
+  fetchProductsBySearchQueryFilterAsync,
+} from "../search/searchResultSlice";
 
 const navigation = [
   { name: "Home", link: "/", user: true },
@@ -30,7 +35,21 @@ function classNames(...classes) {
 export default function Navbar({ children }) {
   const items = useSelector(selectItems);
   const user = useSelector(selectSignedInUser);
- 
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+  const searchQueryHandler = (event) => {
+    if (
+      (event?.key === "Enter" || event === "searchButton") &&
+      searchQuery?.length > 0
+    ) {
+      dispatch(fetchProductsBySearchQueryAsync(searchQuery));
+      navigate(`/search/${searchQuery}`);
+    }
+  };
+
   return (
     <>
       <div className="min-h-full ">
@@ -40,7 +59,7 @@ export default function Navbar({ children }) {
         >
           {({ open }) => (
             <>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mx-auto  max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
@@ -52,8 +71,38 @@ export default function Navbar({ children }) {
                         />
                       </Link>
                     </div>
-                    <div className="hidden md:block">
-                      <div className="ml-10 flex items-baseline space-x-4">
+                  </div>
+                  {/* Search Input */}
+                  <div className="group flex items-center">
+                    <div className="flex h-8 md:h-10 md:ml-10 md:pl-5 border border-[#303030] rounded-l-3xl group-focus-within:border-blue-500 md:group-focus-within:ml-5 md:group-focus-within:pl-0">
+                      <div className="w-10 items-center justify-center hidden group-focus-within:md:flex">
+                        <IoIosSearch className="text-white text-xl" />
+                      </div>
+                      <input
+                        type="text"
+                        className="bg-transparent outline-none text-white pr-5 pl-5 md:pl-0 w-44 md:group-focus-within:pl-0 md:w-64 lg:w-[500px]"
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyUp={searchQueryHandler}
+                        placeholder="Search"
+                        value={searchQuery}
+                      />
+                    </div>
+                    <button
+                      className="w-[40px] md:w-[60px] h-8 md:h-10 flex items-center justify-center border border-l-0 border-[#303030] rounded-r-3xl bg-white/[0.1]"
+                      onClick={() => searchQueryHandler("searchButton")}
+                    >
+                      <IoIosSearch className="text-white text-xl" />
+                    </button>
+                  </div>
+                  {/* <Link to = "/signin"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  >
+                    SignIn
+                  </Link> */}
+
+                  <div className="hidden md:block ">
+                    <div className="ml-5 flex items-center md:ml-6">
+                      <div className="">
                         {navigation.map((item) =>
                           item[user.role] ? (
                             <Link
@@ -72,10 +121,6 @@ export default function Navbar({ children }) {
                           ) : null
                         )}
                       </div>
-                    </div>
-                  </div>
-                  <div className="hidden md:block">
-                    <div className="ml-4 flex items-center md:ml-6">
                       <Link to="/cart" className="flex">
                         <button
                           type="button"

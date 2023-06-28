@@ -23,6 +23,7 @@ import AdminHome from "./pages/AdminHome";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductFormPage from "./pages/AdminProductFormPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
+import SearchResultPage from "./pages/SearchResultPage";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +72,14 @@ const router = createBrowserRouter([
     element: (
       <Protected>
         <OrderSuccessPage />
+      </Protected>
+    ),
+  },
+  {
+    path: "/search/:searchQuery",
+    element: (
+      <Protected>
+        <SearchResultPage />
       </Protected>
     ),
   },
