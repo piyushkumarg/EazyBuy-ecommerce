@@ -4,13 +4,16 @@ import {
   fetchSignedInUserOrderAsync,
   selectUserOrders,
   selectUserInfo,
+  selectUserStatus,
 } from "../userSlice";
 import { discountedPrice } from "../../../app/constants";
+import Loader from "../../common/Loader";
 
 export default function UserOrders() {
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
+  const userStatus = useSelector(selectUserStatus);
 
   useEffect(() => {
     dispatch(fetchSignedInUserOrderAsync(user?.id));
@@ -22,13 +25,17 @@ export default function UserOrders() {
 
   return (
     <div>
+      {userStatus === "loading" && <Loader/>}
       <div className="border-b rounded-lg shadow-sm border-gray-300 pb-4 px-4  sm:px-6">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900">
           My Order
         </h1>
       </div>
       {orders.map((order) => (
-        <div key={order.id} className="mx-auto mt-5 rounded-lg shadow-sm bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div
+          key={order.id}
+          className="mx-auto mt-5 rounded-lg shadow-sm bg-white max-w-7xl px-4 sm:px-6 lg:px-8"
+        >
           <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
             <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
               Order # {order.id}

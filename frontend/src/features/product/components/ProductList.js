@@ -8,6 +8,7 @@ import {
   selectBrands,
   selectCategories,
   selectTotalItems,
+  selecProductStatus,
 } from "../productSlice";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -22,6 +23,7 @@ import {
 import { Link } from "react-router-dom";
 import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
 import Pagination from "../../common/Pagination";
+import Loader from "../../common/Loader";
 
 const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
@@ -40,6 +42,7 @@ export default function ProductList() {
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
   const totalItems = useSelector(selectTotalItems);
+  const productStatus = useSelector(selecProductStatus);
 
   const filters = [
     {
@@ -103,6 +106,7 @@ export default function ProductList() {
 
   return (
     <div>
+      {productStatus === "loading" && <Loader/>}
       <div className="bg-white">
         <div>
           {/* Mobile filter dialog */}

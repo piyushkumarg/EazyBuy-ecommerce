@@ -11,10 +11,6 @@ import { useSelector } from "react-redux";
 import { selectItems } from "../cart/cartSlice";
 import { selectSignedInUser } from "../auth/authSlice";
 import { IoIosSearch } from "react-icons/io";
-import {
-  fetchProductsBySearchQueryAsync,
-  fetchProductsBySearchQueryFilterAsync,
-} from "../search/searchResultSlice";
 
 const navigation = [
   { name: "Home", link: "/", user: true },
@@ -45,7 +41,7 @@ export default function Navbar({ children }) {
       (event?.key === "Enter" || event === "searchButton") &&
       searchQuery?.length > 0
     ) {
-      dispatch(fetchProductsBySearchQueryAsync(searchQuery));
+      // dispatch(fetchProductsBySearchQueryAsync(searchQuery));
       navigate(`/search/${searchQuery}`);
     }
   };
@@ -55,7 +51,7 @@ export default function Navbar({ children }) {
       <div className="min-h-full ">
         <Disclosure
           as="nav"
-          className="bg-gray-800 min-h-fit sticky top-0 z-50"
+          className="bg-gray-800  min-h-fit sticky top-0 z-50"
         >
           {({ open }) => (
             <>
@@ -74,13 +70,35 @@ export default function Navbar({ children }) {
                   </div>
                   {/* Search Input */}
                   <div className="group flex items-center">
-                    <div className="flex h-8 md:h-10 md:ml-10 md:pl-5 border border-[#303030] rounded-l-3xl group-focus-within:border-blue-500 md:group-focus-within:ml-5 md:group-focus-within:pl-0">
+                    <div className="flex h-8 md:h-10 md:ml-10 md:pl-5 border border-gray-600 rounded-l-3xl group-focus-within:border-gray-500 md:group-focus-within:ml-5 md:group-focus-within:pl-0">
                       <div className="w-10 items-center justify-center hidden group-focus-within:md:flex">
                         <IoIosSearch className="text-white text-xl" />
                       </div>
                       <input
                         type="text"
-                        className="bg-transparent outline-none text-white pr-5 pl-5 md:pl-0 w-44 md:group-focus-within:pl-0 md:w-64 lg:w-[500px]"
+                        className="bg-transparent border-0 text-white pr-5 pl-5 md:pl-0 w-44 md:group-focus-within:pl-0 md:w-64 lg:w-[500px] focus:ring-gray-500"
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyUp={searchQueryHandler}
+                        placeholder="Search for products, brand and more"
+                        value={searchQuery}
+                      />
+                    </div>
+                    <button
+                      className="w-[40px] md:w-[60px] h-8 md:h-10 flex items-center justify-center border border-l-0 border-gray-600 rounded-r-3xl bg-white/[0.1]"
+                      onClick={() => searchQueryHandler("searchButton")}
+                    >
+                      <IoIosSearch className="text-white text-xl" />
+                    </button>
+                  </div>
+
+                  {/* <div className="group flex items-center">
+                    <div className="flex h-8 md:h-10 md:ml-10 md:pl-5 border border-[#303030] rounded-l-3xl group-focus-within:border-gray-500 md:group-focus-within:ml-5 md:group-focus-within:pl-0">
+                      <div className="w-10 items-center justify-center hidden group-focus-within:md:flex">
+                        <IoIosSearch className="text-white text-xl" />
+                      </div>
+                      <input
+                        type="text"
+                        className="bg-transparent outline-none text-white pr-5 pl-5 md:pl-0 w-44 md:group-focus-within:pl-0 md:w-64 lg:w-[500px] focus:ring-gray-500 border border-gray-500"
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyUp={searchQueryHandler}
                         placeholder="Search"
@@ -93,7 +111,8 @@ export default function Navbar({ children }) {
                     >
                       <IoIosSearch className="text-white text-xl" />
                     </button>
-                  </div>
+                  </div> */}
+
                   {/* <Link to = "/signin"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                   >
@@ -124,7 +143,7 @@ export default function Navbar({ children }) {
                       <Link to="/cart" className="flex">
                         <button
                           type="button"
-                          className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                          className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white"
                         >
                           <ShoppingCartIcon
                             className="h-6 w-6"
@@ -247,10 +266,10 @@ export default function Navbar({ children }) {
                         </div>
                       </div>
                     </div>
-                    <Link to="/cart" className="flex">
+                    <Link to="/cart" className="flex ">
                       <button
                         type="button"
-                        className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white "
                       >
                         <ShoppingCartIcon
                           className="h-6 w-6"
@@ -258,7 +277,7 @@ export default function Navbar({ children }) {
                         />
                       </button>
                       {items.length > 0 && (
-                        <span className=" rounded-full mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                        <span className=" rounded-full mb-5 -ml-3 bg-gray-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                           {items.length}
                         </span>
                       )}

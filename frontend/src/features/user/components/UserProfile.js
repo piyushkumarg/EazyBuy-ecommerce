@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUserInfo, updateUserAsync } from "../userSlice";
+import {
+  selectUserInfo,
+  updateUserAsync,
+  selectUserStatus,
+} from "../userSlice";
 import { useForm } from "react-hook-form";
+import Loader from "../../common/Loader";
+import Modal from "../../common/Modal";
 
 export default function UserProfile() {
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo);
   const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
   const [showAddAddressForm, setShowAddAddressForm] = useState(false);
+  const userStatus = useSelector(selectUserStatus);
+  const [openModal, setOpenModal] = useState(null);
 
   //TODO: We will add payment section when we work on backend.
 
@@ -52,6 +60,7 @@ export default function UserProfile() {
 
   return (
     <div>
+      {userStatus === "loading" && <Loader />}
       <div className="border-b rounded-md shadow-sm border-gray-300 pb-4 px-4  sm:px-6">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900">
           My Profile
@@ -299,9 +308,9 @@ export default function UserProfile() {
             Your Address
           </h2>
           {user.addresses.map((address, index) => (
-            <div key={index}>
+            <div key={index} >
               {/* Display address */}
-              <div className="flex rounded-md  justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200">
+              <div className="flex rounded-md justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200">
                 <div className="">
                   <p className="text-sm font-semibold leading-6 text-gray-900">
                     {address.name}
@@ -331,8 +340,21 @@ export default function UserProfile() {
                     >
                       Edit
                     </button>
+
+                    <Modal
+                      title={`Remove address ${address.name}`}
+                      message="Are you sure you want to remove this saved address ?"
+                      dangerOption="Remove"
+                      cancelOption="Cancel"
+                      dangerAction={(e) => handleRemove(e, index)}
+                      cancelAction={() => setOpenModal(null)}
+                      showModal={openModal === index}
+                    />
                     <button
-                      onClick={(e) => handleRemove(e, index)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenModal(index);
+                      }}
                       type="button"
                       className="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                     >

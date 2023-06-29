@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../features/navbar/Navbar";
 import SearchResult from "../features/search/SearchResult"
+import Footer from "../features/footer/Footer";
 
 export default function SearchResultPage() {
   
@@ -9,6 +10,7 @@ export default function SearchResultPage() {
       <Navbar>
         <SearchResult />
       </Navbar>
+      <Footer />
     </div>
   );
 }

@@ -5,11 +5,14 @@ import {
   deleteItemFromCartAsync,
   selectItems,
   updateCartAsync,
+  selectItemsStatus,
 } from "../cart/cartSlice";
 import { useForm } from "react-hook-form";
 import { selectSignedInUser, updateUserAsync } from "../auth/authSlice";
 import { createOrderAsync, selectCurrentOrder } from "../order/orderSlice";
 import { discountedPrice } from "../../app/constants";
+import Loader from "../common/Loader";
+import { toast } from "react-toastify";
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -22,6 +25,7 @@ export default function Checkout() {
   const user = useSelector(selectSignedInUser);
   const items = useSelector(selectItems);
   const currentOrder = useSelector(selectCurrentOrder);
+  const itemsStatus = useSelector(selectItemsStatus);
 
   const totalAmount = items.reduce(
     (amount, item) => discountedPrice(item) * item.quantity + amount,
@@ -62,8 +66,16 @@ export default function Checkout() {
       dispatch(createOrderAsync(order));
       // need to redirect from here to a new page of order success.
     } else {
-      // TODO : we can use proper messaging popup here
-      alert("Enter Address and Payment method");
+      toast.warn("Add Address & Payment method!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
     //TODO : Redirect to order-success page
     //TODO : clear cart after order
@@ -72,6 +84,7 @@ export default function Checkout() {
 
   return (
     <>
+      {itemsStatus === "loading" && <Loader />}
       {!items.length && <Navigate to="/" replace={true}></Navigate>}
       {currentOrder && (
         <Navigate

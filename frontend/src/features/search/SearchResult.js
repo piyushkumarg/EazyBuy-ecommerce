@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { StarIcon } from "@heroicons/react/20/solid";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { discountedPrice } from "../../app/constants";
-import { selectSearchResult } from "./searchResultSlice";
+import {
+  fetchProductsBySearchQueryAsync,
+  selectSearchResult,
+  selectSearchResultStatus,
+} from "./searchResultSlice";
+import Loader from "../common/Loader";
 
 export default function SearchResult() {
+  const dispatch = useDispatch()
+  const {searchQuery} = useParams()
   const searchResults = useSelector(selectSearchResult);
+  const searchResultStatus = useSelector(selectSearchResultStatus);
+
   // console.log(searchResults);
+
+  useEffect(()=>{
+    dispatch(fetchProductsBySearchQueryAsync(searchQuery));
+  },[dispatch,searchQuery])
 
   return (
     <div>
+      {searchResultStatus === "loading" && <Loader></Loader>}
       <div className=" px-4 py-6 sm:px-6">
         <div className="flow-root ">
           {searchResults.length > 0 ? (
@@ -63,8 +77,12 @@ export default function SearchResult() {
               ))}
             </ul>
           ) : (
-            <div>
-              <h1 className="text-xl">No Result found...</h1>
+            <div className="flex items-center justify-center ">
+              <img
+                src="https://cdn.dribbble.com/users/2382015/screenshots/6065978/media/1273880a5b9cc8008301089835f37939.gif"
+                alt="No Result found"
+                className="rounded-full"
+              />
             </div>
           )}
         </div>
