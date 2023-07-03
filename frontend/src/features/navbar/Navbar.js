@@ -1,5 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -9,8 +8,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectItems } from "../cart/cartSlice";
-import { selectSignedInUser } from "../auth/authSlice";
 import { IoIosSearch } from "react-icons/io";
+import { selectUserInfo } from "../user/userSlice";
 
 const navigation = [
   { name: "Home", link: "/", user: true },
@@ -30,10 +29,9 @@ function classNames(...classes) {
 
 export default function Navbar({ children }) {
   const items = useSelector(selectItems);
-  const user = useSelector(selectSignedInUser);
+  const userInfo = useSelector(selectUserInfo);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const searchQueryHandler = (event) => {
@@ -91,39 +89,11 @@ export default function Navbar({ children }) {
                     </button>
                   </div>
 
-                  {/* <div className="group flex items-center">
-                    <div className="flex h-8 md:h-10 md:ml-10 md:pl-5 border border-[#303030] rounded-l-3xl group-focus-within:border-gray-500 md:group-focus-within:ml-5 md:group-focus-within:pl-0">
-                      <div className="w-10 items-center justify-center hidden group-focus-within:md:flex">
-                        <IoIosSearch className="text-white text-xl" />
-                      </div>
-                      <input
-                        type="text"
-                        className="bg-transparent outline-none text-white pr-5 pl-5 md:pl-0 w-44 md:group-focus-within:pl-0 md:w-64 lg:w-[500px] focus:ring-gray-500 border border-gray-500"
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyUp={searchQueryHandler}
-                        placeholder="Search"
-                        value={searchQuery}
-                      />
-                    </div>
-                    <button
-                      className="w-[40px] md:w-[60px] h-8 md:h-10 flex items-center justify-center border border-l-0 border-[#303030] rounded-r-3xl bg-white/[0.1]"
-                      onClick={() => searchQueryHandler("searchButton")}
-                    >
-                      <IoIosSearch className="text-white text-xl" />
-                    </button>
-                  </div> */}
-
-                  {/* <Link to = "/signin"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                  >
-                    SignIn
-                  </Link> */}
-
                   <div className="hidden md:block ">
                     <div className="ml-5 flex items-center md:ml-6">
                       <div className="">
                         {navigation.map((item) =>
-                          item[user.role] ? (
+                          item[userInfo.role] ? (
                             <Link
                               key={item.name}
                               to={item.link}
@@ -165,8 +135,8 @@ export default function Navbar({ children }) {
                             <img
                               className="h-8 w-8 rounded-full"
                               src={
-                                user.profileImage
-                                  ? user.profileImage
+                                userInfo.profileImage
+                                  ? userInfo.profileImage
                                   : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                               }
                               alt=""
@@ -226,7 +196,7 @@ export default function Navbar({ children }) {
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                   {navigation.map((item) =>
-                    item[user.role] ? (
+                    item[userInfo.role] ? (
                       <Link
                         key={item.name}
                         to={item.link}
@@ -250,8 +220,8 @@ export default function Navbar({ children }) {
                         <img
                           className="h-10 w-10 rounded-full"
                           src={
-                            user.profileImage
-                              ? user.profileImage
+                            userInfo.profileImage
+                              ? userInfo.profileImage
                               : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                           }
                           alt=""
@@ -259,10 +229,11 @@ export default function Navbar({ children }) {
                       </div>
                       <div className="ml-3">
                         <div className="text-base font-medium leading-none text-white">
-                          {user.name ? user.name : "New User"}
+                          {/* this should come from userInfo */}
+                          {userInfo.name ? userInfo.name : "New User"}
                         </div>
                         <div className="text-sm font-medium leading-none text-gray-400">
-                          {user.email}
+                          {userInfo.email}
                         </div>
                       </div>
                     </div>
