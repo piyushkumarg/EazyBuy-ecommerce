@@ -113,7 +113,10 @@ export default function AdminOrders() {
         </thead>
         <tbody className="text-gray-600 text-sm font-light">
           {orders.map((order) => (
-            <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
+            <tr
+              key={order.id}
+              className="border-b border-gray-200 hover:bg-gray-100"
+            >
               <td className="py-3 px-6 text-left whitespace-nowrap">
                 <div className="flex items-center">
                   <div className="mr-2"></div>
@@ -126,13 +129,14 @@ export default function AdminOrders() {
                     <div className="mr-2">
                       <img
                         className="w-6 h-6 rounded-full"
-                        src={item.thumbnail}
+                        src={item.product.thumbnail}
+                        alt={item.product.title}
                       />
                     </div>
                     <span>
-                      <div>{item.title}</div>
+                      <div>{item.product.title}</div>
                       <div>
-                        #{item.quantity} - ${discountedPrice(item)}
+                        #{item.quantity} - ${discountedPrice(item.product)}
                       </div>
                     </span>
                   </div>
@@ -157,8 +161,9 @@ export default function AdminOrders() {
               </td>
               <td className="py-3 px-6 text-center">
                 {order.id === editableOrderId ? (
-                  <select onChange={(e) => handleUpdate(e, order)}
-                  className="rounded-full text-sm"
+                  <select
+                    onChange={(e) => handleUpdate(e, order)}
+                    className="rounded-full text-sm"
                   >
                     <option value="pending">Pending</option>
                     <option value="dispatched">Dispatched</option>

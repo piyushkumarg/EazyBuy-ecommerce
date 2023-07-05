@@ -9,9 +9,10 @@ import {
   updateProductAsync,
 } from "../../product/productSlice";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams,  } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Modal from "../../common/Modal";
+import { toast } from "react-toastify";
 
 export default function ProductForm() {
   const {
@@ -26,9 +27,9 @@ export default function ProductForm() {
   const dispatch = useDispatch();
   const params = useParams();
   const selectedProduct = useSelector(selectProductById);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(null);
-  console.log(selectedProduct)
+  console.log(selectedProduct);
 
   useEffect(() => {
     if (params.id) {
@@ -60,11 +61,11 @@ export default function ProductForm() {
     dispatch(updateProductAsync(product));
   };
 
-    const handleUndo= () => {
-      const product = { ...selectedProduct };
-      product.deleted = false;
-      dispatch(updateProductAsync(product));
-    };
+  const handleUndo = () => {
+    const product = { ...selectedProduct };
+    product.deleted = false;
+    dispatch(updateProductAsync(product));
+  };
 
   const handleAddProduct = (data) => {
     const product = { ...data };
@@ -87,9 +88,34 @@ export default function ProductForm() {
       product.id = params.id;
       product.rating = selectedProduct.rating || 0;
       dispatch(updateProductAsync(product));
+
+      toast.success("Product Updated successfuly!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
       reset();
     } else {
       dispatch(createProductAsync(product));
+
+      toast.success("Product created successfuly!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      // TODO: these alerts should check if API failed
+
       reset();
       //TODO:  on product successfully added clear fields and show a message
     }

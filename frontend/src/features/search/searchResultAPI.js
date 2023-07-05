@@ -1,10 +1,20 @@
-export function fetchProductsBySearchQuery(searchQuery) {
+export function fetchProductsBySearchQuery(searchQuery, sort, pagination) {
+  let queryString = "";
+  for (let key in sort) {
+    queryString += `${key}=${sort[key]}&`;
+  }
+
+  for (let key in pagination) {
+    queryString += `${key}=${pagination[key]}&`;
+  }
   return new Promise(async (resolve) => {
-    //TODO: we will not hard-code server URL here
     const response = await fetch(
-      "http://localhost:8080/products?q=" + searchQuery
+      `http://localhost:8080/products/search/${searchQuery}?${queryString}`
     );
     const data = await response.json();
-    resolve({ data });
+    const searchTotalItems = await response.headers.get("X-Total-Count");
+    resolve({
+      data: { searchResults: data, searchTotalItems: +searchTotalItems },
+    });
   });
 }

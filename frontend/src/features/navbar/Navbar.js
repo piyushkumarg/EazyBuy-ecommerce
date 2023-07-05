@@ -57,13 +57,23 @@ export default function Navbar({ children }) {
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <Link to="/">
-                        <img
-                          className="h-8 w-8"
-                          src="/ecommerce.png"
-                          alt="Your Company"
-                        />
-                      </Link>
+                      {userInfo?.role === "user" ? (
+                        <Link to="/">
+                          <img
+                            className="h-8 w-8"
+                            src="/ecommerce.png"
+                            alt="Your Company"
+                          />
+                        </Link>
+                      ) : (
+                        <Link to="/admin">
+                          <img
+                            className="h-8 w-8"
+                            src="/ecommerce.png"
+                            alt="Your Company"
+                          />
+                        </Link>
+                      )}
                     </div>
                   </div>
                   {/* Search Input */}
@@ -93,7 +103,7 @@ export default function Navbar({ children }) {
                     <div className="ml-5 flex items-center md:ml-6">
                       <div className="">
                         {navigation.map((item) =>
-                          item[userInfo.role] ? (
+                          item[userInfo?.role] ? (
                             <Link
                               key={item.name}
                               to={item.link}
@@ -135,8 +145,8 @@ export default function Navbar({ children }) {
                             <img
                               className="h-8 w-8 rounded-full"
                               src={
-                                userInfo.profileImage
-                                  ? userInfo.profileImage
+                                userInfo?.profileImage
+                                  ? userInfo?.profileImage
                                   : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                               }
                               alt=""
@@ -196,7 +206,7 @@ export default function Navbar({ children }) {
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                   {navigation.map((item) =>
-                    item[userInfo.role] ? (
+                    item[userInfo?.role] ? (
                       <Link
                         key={item.name}
                         to={item.link}
@@ -220,8 +230,8 @@ export default function Navbar({ children }) {
                         <img
                           className="h-10 w-10 rounded-full"
                           src={
-                            userInfo.profileImage
-                              ? userInfo.profileImage
+                            userInfo?.profileImage
+                              ? userInfo?.profileImage
                               : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                           }
                           alt=""
@@ -230,10 +240,10 @@ export default function Navbar({ children }) {
                       <div className="ml-3">
                         <div className="text-base font-medium leading-none text-white">
                           {/* this should come from userInfo */}
-                          {userInfo.name ? userInfo.name : "New User"}
+                          {userInfo?.name ? userInfo?.name : "New User"}
                         </div>
                         <div className="text-sm font-medium leading-none text-gray-400">
-                          {userInfo.email}
+                          {userInfo?.email}
                         </div>
                       </div>
                     </div>

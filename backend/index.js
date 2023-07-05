@@ -19,6 +19,7 @@ server.use(
 );
 server.use(express.json()); // to parse req.body
 server.use("/products", productRouters.router);
+server.use("/products/search", productRouters.router);
 server.use("/categories", categoriesRouter.router);
 server.use("/brands", brandsRouter.router);
 server.use("/users", usersRouter.router);

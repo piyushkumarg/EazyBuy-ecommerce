@@ -16,9 +16,14 @@ exports.fetchAllProducts = async (req, res) => {
   // sort = {_sort:"price",_order="desc"}
   // pagination = {_page:1,_limit=10}
   // TODO : we have to try with multiple category and brands after change in front-end
-  let query = Product.find({ deleted: { $ne: true } });
-  let totalProductsQuery = Product.find({ deleted: { $ne: true } });
-  
+  let condition = {};
+  if (!req.query.admin) {
+    condition.deleted = { $ne: true };
+  }
+
+  let query = Product.find(condition);
+  let totalProductsQuery = Product.find(condition);
+
   if (req.query.category) {
     query = query.find({ category: req.query.category });
     totalProductsQuery = totalProductsQuery.find({
@@ -45,7 +50,7 @@ exports.fetchAllProducts = async (req, res) => {
 
   try {
     const docs = await query.exec();
-    res.set('X-Total-Count', totalDocs);
+    res.set("X-Total-Count", totalDocs);
     res.status(200).json(docs);
   } catch (err) {
     res.status(400).json(err);
@@ -72,5 +77,47 @@ exports.updateProduct = async (req, res) => {
     res.status(200).json(product);
   } catch (err) {
     res.status(400).json(err);
+  }
+};
+
+//seach Products by any query(or keywords)
+exports.searchProducts = async (req, res) => {
+  const { query } = req.params;
+
+  // Search for products matching the query
+  let productQuery = Product.find({
+    $or: [
+      { title: { $regex: query, $options: "i" } },
+      { description: { $regex: query, $options: "i" } },
+      { brand: { $regex: query, $options: "i" } },
+      { category: { $regex: query, $options: "i" } },
+    ],
+  });
+  //TODO : How to get sort on discounted Price not on Actual price
+  if (req.query._sort && req.query._order) {
+    productQuery = productQuery.sort({ [req.query._sort]: req.query._order });
+  }
+
+  if (req.query._page && req.query._limit) {
+    const pageSize = parseInt(req.query._limit);
+    const page = parseInt(req.query._page);
+    productQuery = productQuery.skip(pageSize * (page - 1)).limit(pageSize);
+  }
+
+  try {
+    const docs = await productQuery.exec();
+    const totalCount = await Product.countDocuments({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+        { brand: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    res.set("X-Total-Count", totalCount);
+    res.status(200).json(docs);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 };
