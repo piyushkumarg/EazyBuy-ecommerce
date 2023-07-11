@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchSignedInUserOrderAsync,
   selectUserOrders,
-  selectUserInfo,
   selectUserStatus,
 } from "../userSlice";
 import { discountedPrice } from "../../../app/constants";
@@ -11,14 +10,13 @@ import Loader from "../../common/Loader";
 
 export default function UserOrders() {
   const dispatch = useDispatch();
-  const userInfo = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
   const userStatus = useSelector(selectUserStatus);
  
 
   useEffect(() => {
-    dispatch(fetchSignedInUserOrderAsync(userInfo.id));
-  }, []);
+    dispatch(fetchSignedInUserOrderAsync());
+  }, [dispatch]);
 
   // if (!Array.isArray(orders)) {
   //   return null; // Render nothing if orders is not an array
@@ -32,7 +30,7 @@ export default function UserOrders() {
           My Order
         </h1>
       </div>
-      {orders.map((order) => (
+      {orders && orders.map((order) => (
         <div
           key={order.id}
           className="mx-auto mt-5 rounded-lg shadow-sm bg-white max-w-7xl px-4 sm:px-6 lg:px-8"

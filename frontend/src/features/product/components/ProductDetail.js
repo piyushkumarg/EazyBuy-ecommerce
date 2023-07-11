@@ -47,7 +47,6 @@ export default function ProductDetail() {
   const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
-  const user = useSelector(selectSignedInUser);
   const product = useSelector(selectProductById);
   const items = useSelector(selectItems);
   const params = useParams();
@@ -60,7 +59,6 @@ export default function ProductDetail() {
       const newItem = {
         product: product.id,
         quantity: 1,
-        user: user.id,
       };
       dispatch(addToCartAsync(newItem));
 
@@ -94,7 +92,6 @@ export default function ProductDetail() {
       const newItem = {
         product: product.id,
         quantity: 1,
-        user: user.id,
       };
       dispatch(addToCartAsync(newItem));
     }

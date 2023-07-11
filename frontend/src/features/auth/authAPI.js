@@ -23,7 +23,7 @@ export function checkUser(signinInfo) {
         const data = await response.json();
         resolve({ data });
       } else {
-        const error = await response.json();
+        const error = await response.text();
         reject(error);
       }
     } catch (error) {

@@ -9,6 +9,7 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
+const cookieParser = require("cookie-parser");
 
 const { createProduct } = require("./controller/Products");
 const productRouters = require("./routes/Products");
@@ -19,15 +20,17 @@ const authRouter = require("./routes/Auth");
 const cartRouter = require("./routes/Cart");
 const ordersRouter = require("./routes/Order");
 const { User } = require('./model/User');
-const { isAuth, sanitizeUser } = require('./services/common');
+const { isAuth, sanitizeUser, cookieExtractor } = require('./services/common');
 
 const SECRET_KEY = 'SECRET_KEY';
 // JWT options
 const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = cookieExtractor;
 opts.secretOrKey = SECRET_KEY; // TODO: should not be in code;
 
 //middleware
+server.use(express.static("build"));
+server.use(cookieParser());
 server.use(
   session({
     secret: "keyboard cat",
@@ -54,27 +57,31 @@ server.use("/orders", isAuth(), ordersRouter.router);
 
 // Passport Strategies
 passport.use(
-  'local',
-  new LocalStrategy(async function (username, password, done) {
+  "local",
+  new LocalStrategy({ usernameField: "email" }, async function (
+    email,
+    password,
+    done
+  ) {
     // by default passport uses username
     try {
-      const user = await User.findOne({ email: username });
-      console.log(username, password, user);
+      const user = await User.findOne({ email: email });
+      console.log(email, password, user);
       if (!user) {
-        return done(null, false, { message: 'invalid credentials' }); // for safety
+        return done(null, false, { message: "invalid credentials" }); // for safety
       }
       crypto.pbkdf2(
         password,
         user.salt,
         310000,
         32,
-        'sha256',
+        "sha256",
         async function (err, hashedPassword) {
           if (!crypto.timingSafeEqual(user.password, hashedPassword)) {
-            return done(null, false, { message: 'invalid credentials' });
+            return done(null, false, { message: "invalid credentials" });
           }
           const token = jwt.sign(sanitizeUser(user), SECRET_KEY);
-          done(null, token); // this lines sends to serializer
+          done(null, {token}); // this lines sends to serializer
         }
       );
     } catch (err) {
@@ -88,7 +95,7 @@ passport.use(
   new JwtStrategy(opts, async function (jwt_payload, done) {
     console.log({ jwt_payload });
     try {
-      const user = await User.findOne({ id: jwt_payload.sub });
+     const user = await User.findById(jwt_payload.id);
       if (user) {
         return done(null, sanitizeUser(user)); // this calls serializer
       } else {
@@ -123,11 +130,11 @@ async function main() {
   console.log("database connected...");
 }
 
-server.get("/", (req, res) => {
-  res.json({ status: "success" });
-});
+// server.get("/", (req, res) => {
+//   res.json({ status: "success" });
+// });
 
-server.post("/", createProduct);
+// server.post("/", createProduct);
 
 server.listen(8080, () => {
   console.log("server started");

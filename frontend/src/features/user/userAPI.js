@@ -1,16 +1,16 @@
-export function fetchSignedInUserOrders(userId) {
+export function fetchSignedInUserOrders() {
   return new Promise(async (resolve) => {
     const response = await fetch(
-      "http://localhost:8080/orders/user/" + userId
+      "http://localhost:8080/orders/own" 
     );
     const data = await response.json();
     resolve({ data });
   });
 }
 
-export function fetchSignedInUser(userId) {
+export function fetchSignedInUser() {
   return new Promise(async (resolve) =>{
-    const response = await fetch('http://localhost:8080/users/'+userId) 
+    const response = await fetch('http://localhost:8080/users/own') 
     const data = await response.json()
     resolve({data})
   }

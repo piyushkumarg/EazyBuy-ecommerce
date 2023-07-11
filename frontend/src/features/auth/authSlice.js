@@ -3,7 +3,7 @@ import { createUser, checkUser, signOut } from "./authAPI";
 import { updateUser } from "../user/userAPI";
 
 const initialState = {
-  signedInUser: null, // this should only contain user identity => 'id'/'role'
+  signedInUserToken: null, // this should only contain user identity => 'id'/'role'
   status: "idle",
   error: null,
 };
@@ -50,30 +50,30 @@ export const authSlice = createSlice({
       })
       .addCase(createUserAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.signedInUser = action.payload;
+        state.signedInUserToken = action.payload;
       })
       .addCase(checkUserAsync.pending, (state) => {
         state.status = "loading";
       })
       .addCase(checkUserAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.signedInUser = action.payload;
+        state.signedInUserToken = action.payload;
       })
       .addCase(checkUserAsync.rejected, (state, action) => {
         state.status = "idle";
-        state.error = action.error;
+        state.error = action.payload;
       })
       .addCase(signOutAsync.pending, (state) => {
         state.status = "loading";
       })
       .addCase(signOutAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.signedInUser = null;
+        state.signedInUserToken = null;
       });
   },
 });
 
-export const selectSignedInUser = (state) => state.auth.signedInUser;
+export const selectSignedInUser = (state) => state.auth.signedInUserToken;
 export const selectError = (state) => state.auth.error;
 
 export default authSlice.reducer;
