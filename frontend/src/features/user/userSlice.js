@@ -7,7 +7,7 @@ import {
 
 const initialState = {
   status: "idle",
-  userInfo: null, // this info will be used in case of detailed user info, while auth will
+  userInfo: {}, // this info will be used in case of detailed user info, while auth will
   // only be used for SignedInUser id etc checks
 };
 

@@ -9,7 +9,11 @@ import CheckoutPage from "./pages/CheckoutPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSignedInUser } from "./features/auth/authSlice";
+import {
+  selectSignedInUser,
+  checkAuthAsync,
+  selectUserChecked,
+} from "./features/auth/authSlice";
 import PageNotFound from "./pages/404";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
 import UserOrdersPage from "./pages/UserOrdersPage";
@@ -160,18 +164,24 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectSignedInUser);
+  const userChecked = useSelector(selectUserChecked);
+
+  useEffect(() => {
+    dispatch(checkAuthAsync());
+  }, [dispatch]);
+
   useEffect(() => {
     if (user) {
-       dispatch(fetchItemsByUserIdAsync());
-       // we can get req.user by token on backend so no need to give in front-end
-       dispatch(fetchSignedInUserAsync());
+      dispatch(fetchItemsByUserIdAsync());
+      // we can get req.user by token on backend so no need to give in front-end
+      dispatch(fetchSignedInUserAsync());
     }
   }, [dispatch, user]);
 
   return (
     <>
       <div className="App">
-        <RouterProvider router={router} />
+        {userChecked && <RouterProvider router={router} />}
       </div>
       <ToastContainer />
     </>

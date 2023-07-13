@@ -1,6 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { checkUserAsync, selectError, selectSignedInUser } from "../authSlice";
+import {
+  signinUserAsync,
+  selectError,
+  selectSignedInUser,
+} from "../authSlice";
 import { useForm } from "react-hook-form";
 import { Link, Navigate } from "react-router-dom";
 
@@ -36,9 +40,8 @@ export default function Signin() {
             className="space-y-6"
             onSubmit={handleSubmit((data) => {
               dispatch(
-                checkUserAsync({ email: data.email, password: data.password })
+                signinUserAsync({ email: data.email, password: data.password })
               );
-              // console.log(data);
             })}
           >
             <div>

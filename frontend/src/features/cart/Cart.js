@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   deleteItemFromCartAsync,
   selectItems,
+  selectCartLoaded,
   updateCartAsync,
   selectItemsStatus,
 } from "./cartSlice";
@@ -16,6 +17,7 @@ export default function Cart() {
   const dispatch = useDispatch();
   const items = useSelector(selectItems);
   const itemsStatus = useSelector(selectItemsStatus);
+  const cartLoaded = useSelector(selectCartLoaded);
   const [openModal, setOpenModal] = useState(null);
 
   const totalAmount = items.reduce(
@@ -35,7 +37,9 @@ export default function Cart() {
   return (
     <>
       {itemsStatus === "loading" && <Loader />}
-      {!items.length && <Navigate to="/" replace={true}></Navigate>}
+      {!items.length && cartLoaded && (
+        <Navigate to="/" replace={true}></Navigate>
+      )}
       <div>
         <div className="mx-auto shadow-sm bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
