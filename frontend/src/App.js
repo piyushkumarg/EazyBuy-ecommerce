@@ -28,6 +28,8 @@ import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductFormPage from "./pages/AdminProductFormPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 import SearchResultPage from "./pages/SearchResultPage";
+import StripeCheckoutPage from "./pages/StripeCheckoutPage";
+
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -153,6 +155,14 @@ const router = createBrowserRouter([
       <AdminProtected>
         <AdminOrdersPage></AdminOrdersPage>
       </AdminProtected>
+    ),
+  },
+  {
+    path: "/stripe-checkout/",
+    element: (
+      <Protected>
+        <StripeCheckoutPage></StripeCheckoutPage>
+      </Protected>
     ),
   },
   {
