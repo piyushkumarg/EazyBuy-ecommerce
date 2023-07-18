@@ -120,7 +120,7 @@ export default function Navbar({ children }) {
                           ) : null
                         )}
                       </div>
-                      <Link to="/cart" className="flex">
+                      <Link to="/my-cart" className="flex">
                         <button
                           type="button"
                           className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white"
@@ -247,7 +247,7 @@ export default function Navbar({ children }) {
                         </div>
                       </div>
                     </div>
-                    <Link to="/cart" className="flex ">
+                    <Link to="/my-cart" className="flex ">
                       <button
                         type="button"
                         className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white "
