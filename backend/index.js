@@ -25,10 +25,10 @@ const { isAuth, sanitizeUser, cookieExtractor } = require("./services/common");
 const path = require("path");
 const { Order } = require("./model/Order");
 
+const stripe = require("stripe")(process.env.STRIPE_SERVER_KEY);
+
 // Webhook
 
-// TODO: we will capture actual order after deploying out server live on public URL
-// This is your Stripe CLI webhook secret for testing your endpoint locally
 const endpointSecret = process.env.ENDPOINT_SECRET;
 
 server.post(
@@ -50,11 +50,13 @@ server.post(
     switch (event.type) {
       case "payment_intent.succeeded":
         const paymentIntentSucceeded = event.data.object;
+
         const order = await Order.findById(
           paymentIntentSucceeded.metadata.orderId
         );
         order.paymentStatus = "received";
         await order.save();
+
         break;
       // ... handle other event types
       default:
@@ -65,7 +67,6 @@ server.post(
     response.send();
   }
 );
-
 // JWT options
 const opts = {};
 opts.jwtFromRequest = cookieExtractor;
@@ -176,7 +177,6 @@ passport.deserializeUser(function (user, cb) {
 
 // Payments
 // This is your test secret API key.
-const stripe = require("stripe")(process.env.STRIPE_SERVER_KEY);
 
 server.post("/create-payment-intent", async (req, res) => {
   const { totalAmount, orderId } = req.body;
