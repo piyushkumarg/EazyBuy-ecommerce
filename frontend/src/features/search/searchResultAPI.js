@@ -9,7 +9,7 @@ export function fetchProductsBySearchQuery(searchQuery, sort, pagination) {
   }
   return new Promise(async (resolve) => {
     const response = await fetch(
-      `http://localhost:8080/products/search/${searchQuery}?${queryString}`
+      `/products/search/${searchQuery}?${queryString}`
     );
     const data = await response.json();
     const searchTotalItems = await response.headers.get("X-Total-Count");
