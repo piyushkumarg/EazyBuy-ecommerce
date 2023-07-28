@@ -145,7 +145,7 @@ export default function ProductList() {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                      <div className="py-1 cursor-pointer">
                         {sortOptions.map((option) => (
                           <Menu.Item key={option.name}>
                             {({ active }) => (
@@ -313,11 +313,11 @@ function MobileFilter({
                                     onChange={(e) =>
                                       handleFilter(e, section, option)
                                     }
-                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    className="h-4 w-4 cursor-pointer rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                   />
                                   <label
                                     htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                    className="ml-3 min-w-0 flex-1 text-gray-500"
+                                    className="ml-3 cursor-pointer min-w-0 flex-1 text-gray-500"
                                   >
                                     {option.label}
                                   </label>
@@ -376,11 +376,11 @@ function DesktopFilter({ handleFilter, filters }) {
                           type="checkbox"
                           defaultChecked={option.checked}
                           onChange={(e) => handleFilter(e, section, option)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          className="h-4 w-4 cursor-pointer rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                         />
                         <label
                           htmlFor={`filter-${section.id}-${optionIdx}`}
-                          className="ml-3 text-sm text-gray-600"
+                          className="ml-3 text-sm text-gray-600 cursor-pointer"
                         >
                           {option.label}
                         </label>

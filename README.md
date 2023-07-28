@@ -2,7 +2,7 @@
 
 The EazyBuy e-commerce project consists of a frontend and a backend component. The frontend provides a user-friendly interface for both customers and admins to browse and purchase products. The admin has accessibility to update, delete, and manage orders of the products. Additionally, the backend handles server-side functionalities such as authentication, data storage, and order management.
 
-### Deployed Application [See Here]()
+### Deployed Application [See Here](https://eazy-buy-ecommerce.vercel.app/)
 
 ## Features
 🛒 User Panel:

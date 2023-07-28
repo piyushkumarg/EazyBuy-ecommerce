@@ -1,10 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  signinUserAsync,
-  selectError,
-  selectSignedInUser,
-} from "../authSlice";
+import { signinUserAsync, selectError, selectSignedInUser } from "../authSlice";
 import { useForm } from "react-hook-form";
 import { Link, Navigate } from "react-router-dom";
 
@@ -18,6 +14,12 @@ export default function Signin() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const handleSiginAsGuest = (e) => {
+    dispatch(
+      signinUserAsync({ email: "guest@gmail.com", password: "Guest@123" })
+    );
+  };
 
   return (
     <>
@@ -100,7 +102,9 @@ export default function Signin() {
                   <p className="text-red-500">{errors.password.message}</p>
                 )}
               </div>
-              {error && <p className="text-red-500">{error || error.message}</p>}
+              {error && (
+                <p className="text-red-500">{error || error.message}</p>
+              )}
             </div>
 
             <div>
@@ -111,6 +115,13 @@ export default function Signin() {
                 Sign in
               </button>
             </div>
+
+              <div
+                onClick={handleSiginAsGuest}
+                className="flex w-full cursor-pointer justify-center rounded-md bg-green-700 px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm text-white hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Sign as Guest
+              </div>
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
