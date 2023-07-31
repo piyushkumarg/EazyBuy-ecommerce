@@ -9,13 +9,12 @@ import {
 } from "../productSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
-import { selectSignedInUser } from "../../auth/authSlice";
 import { discountedPrice } from "../../../app/constants";
 import Loader from "../../common/Loader";
 
 import { toast } from "react-toastify";
 
-//// TODO: In server data we will add colors, sizes , highlights. to each product
+// TODO: In server data we will add colors, sizes , highlights. to each product
 const colors = [
   { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
   { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
